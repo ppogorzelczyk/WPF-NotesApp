@@ -101,7 +101,13 @@ namespace NotesApp.View
         private void contentRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
             var selectedState = contentRichTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
-            boldButton.IsChecked = (selectedState != DependencyProperty.UnsetValue) && (selectedState.Equals(FontWeights.Bold));
+            boldButton.IsChecked = (selectedState != DependencyProperty.UnsetValue) && selectedState.Equals(FontWeights.Bold);
+
+            var selectedStyle = contentRichTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
+            italicButton.IsChecked = (selectedStyle != DependencyProperty.UnsetValue) && selectedStyle.Equals(FontStyles.Italic);
+
+            var selectedDecoration = contentRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
+            underlineButton.IsChecked = (selectedDecoration != DependencyProperty.UnsetValue) && selectedDecoration.Equals(TextDecorations.Underline);
         }
 
         private void italicButton_Click(object sender, RoutedEventArgs e)
