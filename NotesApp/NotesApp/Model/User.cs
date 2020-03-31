@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace NotesApp.Model
     public class User : INotifyPropertyChanged
     {
 		private int id;
-
+		[PrimaryKey, AutoIncrement]
 		public int Id
 		{
 			get { return id; }
@@ -22,7 +23,7 @@ namespace NotesApp.Model
 		}
 
 		private string name;
-
+		[MaxLength(50)]
 		public string Name
 		{
 			get { return name; }
@@ -34,7 +35,7 @@ namespace NotesApp.Model
 		}
 
 		private string lastName;
-
+		[MaxLength(50)]
 		public string LastName
 		{
 			get { return lastName; }
