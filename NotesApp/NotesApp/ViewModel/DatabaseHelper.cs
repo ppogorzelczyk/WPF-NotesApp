@@ -12,6 +12,11 @@ namespace NotesApp.ViewModel
     {
         private static string dbFile = Path.Combine(Environment.CurrentDirectory, "notesDb.db3");
 
+        public static string GetFileLocation()
+        {
+            return dbFile;
+        }
+
         public static bool Insert<T>(T item)
         {
             bool result = false;
