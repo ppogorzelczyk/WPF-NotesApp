@@ -21,8 +21,7 @@ namespace NotesApp.ViewModel
 			set 
 			{ 
 				selectedNotebook = value;
-				//TODO: Get notes
-				//OnPropertyChanged("SelectedNotebook");
+				ReadNotes();
 			}
 		}
 
@@ -40,6 +39,7 @@ namespace NotesApp.ViewModel
 			Notes = new ObservableCollection<Note>();
 
 			ReadNotebooks();
+			ReadNotes();
 		}
 
 		public void CreateNote(int notebookId)
@@ -53,6 +53,7 @@ namespace NotesApp.ViewModel
 			};
 
 			DatabaseHelper.Insert(newNote);
+			ReadNotes();
 		}
 
 		public void CreateNotebook()
@@ -63,6 +64,7 @@ namespace NotesApp.ViewModel
 			};
 
 			DatabaseHelper.Insert(newNotebook);
+			ReadNotebooks();
 		}
 
 		public void ReadNotebooks()
@@ -81,11 +83,11 @@ namespace NotesApp.ViewModel
 
 		public void ReadNotes()
 		{
-			if (selectedNotebook != null)
+			if (SelectedNotebook != null)
 			{
 				using (SQLite.SQLiteConnection conn = new SQLite.SQLiteConnection(DatabaseHelper.GetFileLocation()))
 				{
-					var notes = conn.Table<Note>().Where(n => n.NotebookId == selectedNotebook.Id).ToList();
+					var notes = conn.Table<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
 					Notes.Clear();
 					
 					foreach (var note in notes)
