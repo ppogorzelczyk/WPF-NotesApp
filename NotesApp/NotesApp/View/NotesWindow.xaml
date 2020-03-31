@@ -53,21 +53,25 @@
             <ToolBar>
                 <ToggleButton Content="Speech"
                         Click="SpeechButton_Click"/>
-                <ToggleButton x:Name="boldButton"
-                        Click="boldButton_Click">
+                <ToggleButton Command="EditingCommands.ToggleBold" x:Name="boldButton">
                     <TextBlock Text="B"
                                FontWeight="Bold"/>
                 </ToggleButton>
-                <ToggleButton x:Name="italicButton"
-                              Click="italicButton_Click">
+                <ToggleButton Command="EditingCommands.ToggleItalic" x:Name="italicButton">
                     <TextBlock Text="I"
                                FontStyle="Italic"/>
                 </ToggleButton>
-                <ToggleButton x:Name="underlineButton"
-                              Click="underlineButton_Click">
+                <ToggleButton Command="EditingCommands.ToggleUnderline" x:Name="underlineButton">
                     <TextBlock Text="U"
                                TextDecorations="Underline"/>
                 </ToggleButton>
+                <ComboBox x:Name="fontFamilyComboBox"
+                          Width="100"
+                          SelectionChanged="fontFamilyComboBox_SelectionChanged"/>
+                <ComboBox x:Name="fontSizeComboBox"
+                          Width="50"
+                          IsEditable="True"
+                          TextBoxBase.TextChanged="fontSizeComboBox_TextChanged"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>
