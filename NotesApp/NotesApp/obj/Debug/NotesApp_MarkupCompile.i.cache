@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\App.xaml
-3-2045101676
+4-1129282859
 2-85119822
-181689704772
-122-478561767
-MainWindow.xaml;View\LoginWindow.xaml;View\NotesWindow.xaml;
+20-1614962864
+1231106235700
+View\LoginWindow.xaml;View\NotesWindow.xaml;View\UserControls\NotebookControl.xaml;View\UserControls\NoteControl.xaml;
 
-False
+True
 

@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:NotesApp.View"
         xmlns:vm="clr-namespace:NotesApp.ViewModel"
         xmlns:uc="clr-namespace:NotesApp.View.UserControls"
+        xmlns:cv="clr-namespace:NotesApp.ViewModel.Converters"
         mc:Ignorable="d"
         Title="NotesWindow" Height="400" Width="600">
     
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
+        <cv:BoolToVisConverter x:Key="boolToVis"/>
     </Window.Resources>
     
     <DockPanel DataContext="{StaticResource vm}">
@@ -38,7 +40,16 @@
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:NotebookControl DisplayNotebook="{Binding}"/>
+                    <Grid>
+                        <uc:NotebookControl DisplayNotebook="{Binding}"/>
+                        <TextBox Text="{Binding Name, Mode=TwoWay}"
+                                 Visibility="{Binding Source={StaticResource vm}, Path=IsEditing, Converter={StaticResource boolToVis}}"/>
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Rename"/>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

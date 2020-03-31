@@ -28,8 +28,7 @@ namespace NotesApp.View
         {
             InitializeComponent();
 
-            
-
+            #region Speech Recognition
             //english culture
             RecognizerInfo ri = null;
             foreach (var i in SpeechRecognitionEngine.InstalledRecognizers())
@@ -52,12 +51,23 @@ namespace NotesApp.View
             recognizer.LoadGrammar(grammar);
             recognizer.SetInputToDefaultAudioDevice();
             recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
+            #endregion
 
             var fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             fontFamilyComboBox.ItemsSource = fontFamilies;
 
             List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 28, 36, 48, 72 };
             fontSizeComboBox.ItemsSource = fontSizes;
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (string.IsNullOrEmpty(App.UserId))
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.ShowDialog();
+            }
         }
 
         private void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)

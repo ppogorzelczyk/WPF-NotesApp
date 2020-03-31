@@ -1,12 +1,9 @@
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\bin\Debug\NotesApp.exe.config
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\bin\Debug\NotesApp.exe
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\bin\Debug\NotesApp.pdb
-C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp.csprojAssemblyReference.cache
-C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\MainWindow.g.cs
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\App.g.cs
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp_MarkupCompile.cache
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp_MarkupCompile.lref
-C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\MainWindow.baml
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp.g.resources
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp.Properties.Resources.resources
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp.csproj.GenerateResource.cache
@@ -28,3 +25,7 @@ C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\LoginWindo
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\NotesWindow.baml
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\NotesApp.csproj.CopyComplete
 C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\UserControls\NotebookControl.g.cs
+C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\UserControls\NotebookControl.baml
+C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\UserControls\NoteControl.g.cs
+C:\projekty\00_Kurs_WPF\WPF-NotesApp\NotesApp\NotesApp\obj\Debug\View\UserControls\NoteControl.baml

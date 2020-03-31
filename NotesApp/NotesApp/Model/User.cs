@@ -22,6 +22,18 @@ namespace NotesApp.Model
 			}
 		}
 
+		private string username;
+		[MaxLength(50)]
+		public string Username
+		{
+			get { return username; }
+			set
+			{
+				username = value;
+				OnPropertyChanged("Username");
+			}
+		}
+
 		private string name;
 		[MaxLength(50)]
 		public string Name
