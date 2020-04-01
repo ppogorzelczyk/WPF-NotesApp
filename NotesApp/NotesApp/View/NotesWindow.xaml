@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:NotesApp.ViewModel"
         xmlns:uc="clr-namespace:NotesApp.View.UserControls"
         xmlns:cv="clr-namespace:NotesApp.ViewModel.Converters"
+        xmlns:b="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="NotesWindow" Height="400" Width="600">
     
@@ -15,7 +16,7 @@
         <cv:BoolToVisConverter x:Key="boolToVis"/>
     </Window.Resources>
     
-    <DockPanel DataContext="{StaticResource vm}">
+    <DockPanel x:Name="container">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New notebook"
@@ -43,10 +44,18 @@
                     <Grid>
                         <uc:NotebookControl DisplayNotebook="{Binding}"/>
                         <TextBox Text="{Binding Name, Mode=TwoWay}"
-                                 Visibility="{Binding Source={StaticResource vm}, Path=IsEditing, Converter={StaticResource boolToVis}}"/>
+                                 Visibility="{Binding Source={StaticResource vm}, Path=IsEditing, Converter={StaticResource boolToVis}}">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="LostFocus">
+                                    <b:InvokeCommandAction Command="{Binding Source={StaticResource vm}, Path=HasEditedCommand}"
+                                                           CommandParameter="{Binding}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                        </TextBox>
                         <Grid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Rename"/>
+                                <MenuItem Header="Rename"
+                                          Command="{Binding Source={StaticResource vm}, Path=BeginEditCommand}"/>
                             </ContextMenu>
                         </Grid.ContextMenu>
                     </Grid>
@@ -55,6 +64,7 @@
         </ListView>
         <ListView Width="140"
                   DockPanel.Dock="Left"
+                  SelectedItem="{Binding SelectedNote}"
                   ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -85,6 +95,9 @@
                           Width="50"
                           IsEditable="True"
                           TextBoxBase.TextChanged="fontSizeComboBox_TextChanged"/>
+                <Button Content="Save"
+                        x:Name="saveFileButton"
+                        Click="saveFileButton_Click"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>
