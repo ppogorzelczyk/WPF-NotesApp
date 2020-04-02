@@ -20,7 +20,7 @@ namespace NotesApp.ViewModel.Commands
 
         public bool CanExecute(object parameter)
         {
-            Notebook selectedNotebook = parameter as Notebook;
+            Notebook selectedNotebook = VM.SelectedNotebook;
             if (selectedNotebook != null)
                 return true;
 
@@ -29,7 +29,7 @@ namespace NotesApp.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            Notebook selectedNotebook = parameter as Notebook;
+            Notebook selectedNotebook = VM.SelectedNotebook;
             VM.CreateNote(selectedNotebook.Id);
         }
     }

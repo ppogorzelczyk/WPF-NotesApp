@@ -34,6 +34,7 @@ namespace NotesApp.ViewModel
 			{ 
 				selectedNotebook = value;
 				ReadNotes();
+				OnPropertyChanged("SelectedNotebook");
 			}
 		}
 
@@ -46,6 +47,7 @@ namespace NotesApp.ViewModel
 			{ 
 				selectedNote = value;
 				SelectedNoteChanged(this, new EventArgs());
+				OnPropertyChanged("SelectedNote");
 			}
 		}
 
@@ -81,7 +83,7 @@ namespace NotesApp.ViewModel
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public void CreateNote(int notebookId)
+		public async void CreateNote(string notebookId)
 		{
 			Note newNote = new Note()
 			{
@@ -91,51 +93,81 @@ namespace NotesApp.ViewModel
 				Title = "New note"
 			};
 
-			DatabaseHelper.Insert(newNote);
+			await DatabaseHelper.Insert(newNote);
 			ReadNotes();
 		}
 
-		public void CreateNotebook()
+		public async void CreateNotebook()
 		{
 			Notebook newNotebook = new Notebook()
 			{
 				Name = "New notebook",
-				UserId = int.Parse(App.UserId)
+				UserId = App.UserId
 			};
 
-			DatabaseHelper.Insert(newNotebook);
+			await DatabaseHelper.Insert(newNotebook);
 			ReadNotebooks();
 		}
 
-		public void ReadNotebooks()
+		public async void ReadNotebooks()
 		{
-			using (SQLite.SQLiteConnection conn = new SQLite.SQLiteConnection(DatabaseHelper.GetFileLocation()))
+			//using (SQLite.SQLiteConnection conn = new SQLite.SQLiteConnection(DatabaseHelper.GetFileLocation()))
+			//{
+			//	//int userId;
+			//	//bool isLogged = int.TryParse(App.UserId, out userId);
+			//	var notebooks = conn.Table<Notebook>()/*.Where(n => isLogged && n.UserId == userId)*/.ToList();
+
+			//	Notebooks.Clear();
+			//	foreach (var notebook in notebooks)
+			//	{
+			//		Notebooks.Add(notebook);
+			//	}
+			//}
+
+			try
 			{
-				//int userId;
-				//bool isLogged = int.TryParse(App.UserId, out userId);
-				var notebooks = conn.Table<Notebook>()/*.Where(n => isLogged && n.UserId == userId)*/.ToList();
-				
+				var notebooks = await App.MobileServiceClient.GetTable<Notebook>().Where(n => n.UserId == App.UserId).ToListAsync();
+
 				Notebooks.Clear();
 				foreach (var notebook in notebooks)
 				{
 					Notebooks.Add(notebook);
 				}
 			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
 		}
 
-		public void ReadNotes()
+		public async void ReadNotes()
 		{
 			if (SelectedNotebook != null)
 			{
-				using (SQLite.SQLiteConnection conn = new SQLite.SQLiteConnection(DatabaseHelper.GetFileLocation()))
+				//using (SQLite.SQLiteConnection conn = new SQLite.SQLiteConnection(DatabaseHelper.GetFileLocation()))
+				//{
+				//	var notes = conn.Table<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
+				//	Notes.Clear();
+
+				//	foreach (var note in notes)
+				//	{
+				//		Notes.Add(note);
+				//	}
+				//}
+
+				try
 				{
-					var notes = conn.Table<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToList();
+					var notes = await App.MobileServiceClient.GetTable<Note>().Where(n => n.NotebookId == SelectedNotebook.Id).ToListAsync();
+
 					Notes.Clear();
-					
 					foreach (var note in notes)
 					{
 						Notes.Add(note);
 					}
+				}
+				catch (Exception ex)
+				{
+					throw ex;
 				}
 			}
 		}
@@ -145,19 +177,19 @@ namespace NotesApp.ViewModel
 			IsEditing = true;
 		}
 
-		public void HasRenamed(Notebook notebook)
+		public async void HasRenamed(Notebook notebook)
 		{
 			if (notebook != null)
 			{
-				DatabaseHelper.Update(notebook);
+				await DatabaseHelper.Update(notebook);
 				IsEditing = false;
 				ReadNotebooks();
 			}
 		}
 
-		public void UpdateSelectedNote()
+		public async void UpdateSelectedNote()
 		{
-			DatabaseHelper.Update(SelectedNote);
+			SelectedNote = await DatabaseHelper.Update(SelectedNote);
 		}
 	}
 }

@@ -1,8 +1,10 @@
-﻿using NotesApp.ViewModel;
+﻿using Microsoft.WindowsAzure.Storage;
+using NotesApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Speech.Recognition;
 using System.Text;
 using System.Threading;
@@ -67,19 +69,20 @@ namespace NotesApp.View
             fontSizeComboBox.ItemsSource = fontSizes;
         }
 
-        private FileStream fs;
-        private void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
+        private async void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
         {
             contentRichTextBox.Document.Blocks.Clear();
-            if (fs != null)
-            {
-                fs.Close();
-            }
             if (viewModel.SelectedNote != null && !string.IsNullOrEmpty(viewModel.SelectedNote.FileLocation))
             {
-                fs = new FileStream(viewModel.SelectedNote.FileLocation, FileMode.Open);
-                TextRange range = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-                range.Load(fs, DataFormats.Rtf);
+                Stream rtfFileStream = null;
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(viewModel.SelectedNote.FileLocation);
+                    rtfFileStream = await response.Content.ReadAsStreamAsync();
+                    
+                    TextRange range = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+                    range.Load(rtfFileStream, DataFormats.Rtf);
+                }
             }
         }
 
@@ -90,6 +93,10 @@ namespace NotesApp.View
             {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.ShowDialog();
+            }
+            else
+            {
+                viewModel.ReadNotebooks();
             }
         }
 
@@ -163,16 +170,39 @@ namespace NotesApp.View
             }
         }
 
-        private void saveFileButton_Click(object sender, RoutedEventArgs e)
+        private async void saveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            string rtfFile = System.IO.Path.Combine(Environment.CurrentDirectory, $"{viewModel.SelectedNote.Id}.rtf");
-            viewModel.SelectedNote.FileLocation = rtfFile;
+            string fileName = $"{viewModel.SelectedNote.Id}.rtf";
+            string rtfFile = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
 
-            FileStream fs = new FileStream(rtfFile, FileMode.Create);
-            TextRange range = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-            range.Save(fs, DataFormats.Rtf);
+            using(FileStream fs = new FileStream(rtfFile, FileMode.Create))
+            {
+                TextRange range = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+                range.Save(fs, DataFormats.Rtf);
+            }
+
+            string fileUrl = await UploadFile(rtfFile, fileName);
+            viewModel.SelectedNote.FileLocation = fileUrl;
 
             viewModel.UpdateSelectedNote();
+        }
+
+        private async Task<string> UploadFile(string rtfFileLocation, string fileName)
+        {
+            string fileUrl = string.Empty;
+            var account = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=evernotecloneappstorage;AccountKey=uYOCz9r4tnBWQSEKn8b0ZYTM21X1V2b9dZszHhkyAlKdzVfpthuUC/ome+LI4FLiBsMuEajKuXQYiYhxpiph5g==;EndpointSuffix=core.windows.net");
+            var client = account.CreateCloudBlobClient();
+            var container = client.GetContainerReference("notes");
+            await container.CreateIfNotExistsAsync();
+            var blob = container.GetBlockBlobReference(fileName);
+
+            using (FileStream fs = new FileStream(rtfFileLocation, FileMode.Open))
+            {
+                await blob.UploadFromStreamAsync(fs);
+                fileUrl = blob.Uri.OriginalString;
+            }
+
+            return fileUrl;
         }
     }
 }

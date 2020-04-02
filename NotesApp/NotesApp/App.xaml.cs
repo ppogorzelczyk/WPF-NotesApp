@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -14,5 +15,6 @@ namespace NotesApp
     public partial class App : Application
     {
         public static string UserId = string.Empty;
+        public static MobileServiceClient MobileServiceClient = new MobileServiceClient("https://evernotecloneapp.azurewebsites.net");
     }
 }

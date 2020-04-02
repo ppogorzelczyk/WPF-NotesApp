@@ -9,7 +9,9 @@
         xmlns:cv="clr-namespace:NotesApp.ViewModel.Converters"
         xmlns:b="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="400" Width="600">
+        Title="Notes"
+        Icon="Notes.ico"
+        Height="400" Width="600">
     
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
@@ -34,10 +36,11 @@
                 <TextBlock x:Name="statusTextBlock"/>
             </StatusBarItem>
         </StatusBar>
-        <ListView Width="140"
+        <ListView x:Name="notebooksListView"
+                  Width="140"
                   Background="MidnightBlue"
                   DockPanel.Dock="Left"
-                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
